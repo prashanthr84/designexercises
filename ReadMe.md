@@ -7,6 +7,8 @@
 
 * Feel free to add more problems and solutions too.
 
+* As part of the solution, usecase diagram, class diagram and sequence diagram(s) are added covering the most important scenarios.
+
 
 
 
