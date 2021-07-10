@@ -69,10 +69,12 @@ class PrepaidCardPaymentSystem {
 
 
 
+
 class ParkingSpot {
     Id
     Size
     IsAlloted
+    IsReservedForElectricVehicle
 }
 
 class PrepaidCard {
@@ -86,16 +88,48 @@ class CustomerPortal {
     Pay(ParkingTicket)
 }
 
+class AutoExitPanel {
+    Checkout(ParkingSlip, Card)
+}
+
+class FloorDisplayBoard {
+    DisplayInfo()
+}
+
+class VehcileChargingPaymentPortal {
+    Pay(Card)
+}
+
+class ParkingSlip {
+    CheckInTime
+    checkOutTime
+}
+
+class Charge {
+    InTime
+    OutTime
+    Amount
+}
+
 Kiosk o-- PaymentSystem
 Kiosk o-- ParkingLot
-ParkingLot o-- ParkingFloor
-ParkingFloor o-- ParkingSpot
+
 PaymentSystem <|-- CashPaymentSystem
 PaymentSystem <|-- PrepaidCardPaymentSystem
 Kiosk o--- ChargeCalculator
 CustomerPortal --> ChargeCalculator
 CustomerPortal --> PaymentSystem
 
+left to right direction
+ParkingFloor o-- CustomerPortal
+ParkingLot o-- ParkingFloor
+ParkingFloor o-- ParkingSpot
+
+AutoExitPanel o-- ParkingLot
+AutoExitPanel o-- PaymentSystem
+AutoExitPanel o-- PaymentSystem
+
+FloorDisplayBoard --> ParkingFloor
 @enduml
 
 @startuml vehicle check in sequence diagram when space available
