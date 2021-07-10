@@ -1,0 +1,40 @@
+@startuml CustomerUseCases
+
+:customer: --> (take parking slip)
+:customer: --> (exit the parking)
+:customer: --> (pay for the parking)
+
+
+@enduml
+
+
+@startuml AdminUseCases
+
+:Admin: as Admin
+
+Admin --> (add parking slot)
+Admin --> (add parking floor)
+Admin --> (remove parking slot)
+Admin --> (remove parking floor)
+
+@enduml
+
+@startuml ParkingAttendantUseCases
+
+:ParkingAttendant: as Attendant
+Attendant --> (generate parking slip)
+Attendant --> (generate parking bill)
+Attendant --> (Accept cash/card payment)
+
+@enduml
+
+
+@startuml SystemUseCases
+
+:system: --> Allot parking spot
+:system: --> Generate bill
+:system: --> De-allot parking spot
+:system: --> show available parking spots
+
+
+@enduml

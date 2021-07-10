@@ -1,0 +1,133 @@
+@startuml parking management system class diagram
+
+class Vehicle {
+    Size
+    Number
+}
+
+class VehicleOwner {
+    CheckIn(Vehicle)
+    CheckOut(PrepaidCard)
+}
+
+class Kiosk {
+    CheckIn()
+    CheckOut(ParkingTicket)
+}
+
+class ParkingAttendent {
+    Name
+    ID
+    CheckOut(ParkingTicket)
+}
+
+class ParkingTicket {
+    Vehicle
+    CheckInTime
+    CheckOutTime
+    IsPaid
+}
+
+class ChargeCalculator {
+    CalculateCharge(ParkingTicket)
+}
+
+class ParkingLot {
+    ParkingFloor[]
+    IsEmptySpaceAvailable(Vehicle)
+    AllotSpace(Vehicle)
+    GetAllottedSpace(Vehicle)
+    FreeSpace(Space, Floor)
+    AddFloor(ParkingFloor)
+    RemoveFloor(ParkingFloor)
+    AddSpace(Space, Floor)
+    RemoveSpace(Space, Floor)
+}
+
+class ParkingFloor {
+    Number
+    ParkingSpot[]
+    IsEmptySpaceAvailable(Vehicle)
+    AllotSpace(Vehicle)
+    GetAllottedSpace(Vehicle)
+    FreeSpace(Space)
+    AddSpace(Space)
+    RemoveSpace(Space)
+}
+
+abstract class PaymentSystem {
+    Pay(Charge)
+}
+
+class CashPaymentSystem {
+    Pay(Charge)
+}
+
+class PrepaidCardPaymentSystem {
+    Pay(Charge)
+}
+
+
+
+class ParkingSpot {
+    Id
+    Size
+    IsAlloted
+}
+
+class PrepaidCard {
+    Id
+    AmountAvailable
+    Charge(Amount)
+    Load(Amount)
+}
+
+class CustomerPortal {
+    Pay(ParkingTicket)
+}
+
+Kiosk o-- PaymentSystem
+Kiosk o-- ParkingLot
+ParkingLot o-- ParkingFloor
+ParkingFloor o-- ParkingSpot
+PaymentSystem <|-- CashPaymentSystem
+PaymentSystem <|-- PrepaidCardPaymentSystem
+Kiosk o--- ChargeCalculator
+CustomerPortal --> ChargeCalculator
+CustomerPortal --> PaymentSystem
+
+@enduml
+
+@startuml vehicle check in sequence diagram when space available
+
+VehicleOwner -> Kiosk: CheckIn(Vehicle)
+Kiosk -> ParkingLot: IsEmptySpaceAvailable(Vehicle)
+ParkingLot --> Kiosk: Yes
+Kiosk -> ParkingLot: AllotSpace
+ParkingLot --> Kiosk: AllottedSpace
+Kiosk --> VehicleOwner: ParkingTicket
+
+@enduml
+
+@startuml vehicle checkin sequence diagram with no space available
+
+VehicleOwner -> Kiosk: CheckIn
+Kiosk -> ParkingLot: IsEmptySpaceAvailable
+ParkingLot --> Kiosk: NoSpaceAvailable
+Kiosk --> VehicleOwner: NoSpaceAvailable
+
+@enduml
+
+@startuml Sequence diagram - Vehicle checkout
+
+VehicleOwner -> Kiosk: CheckOut(ParkingTicket,PrepaidCard)
+Kiosk -> ChargeCalculator: CalculateCharge(ParkingTicket)
+ChargeCalculator -> ChargeCalculator: Calculate(ParkingTicket)
+ChargeCalculator --> Kiosk: Charge
+Kiosk -> PaymentSystem: Pay(PrepaidCharge)
+PaymentSystem --> Kiosk: Success
+Kiosk -> ParkingLot: FreeSpace(Space)
+ParkingLot --> Kiosk: FreedSpace
+Kiosk -> VehicleOwner: Success
+
+@enduml
