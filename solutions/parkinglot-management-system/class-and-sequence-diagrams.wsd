@@ -26,6 +26,8 @@ class ParkingTicket {
     CheckInTime
     CheckOutTime
     IsPaid
+    AmountPaid
+    PaidAt
 }
 
 class ChargeCalculator {
@@ -48,9 +50,10 @@ class ParkingFloor {
     Number
     ParkingSpot[]
     IsEmptySpaceAvailable(Vehicle)
-    AllotSpace(Vehicle)
+    AllotSpot(Vehicle)
     GetAllottedSpace(Vehicle)
-    FreeSpace(Space)
+    FreeSpot(Space)
+    UpdateDisplayBoard()
     AddSpace(Space)
     RemoveSpace(Space)
 }
@@ -67,15 +70,32 @@ class PrepaidCardPaymentSystem {
     Pay(Charge)
 }
 
-
-
-
 class ParkingSpot {
     Id
     Size
     IsAlloted
-    IsReservedForElectricVehicle
+    GetSpotType()
 }
+
+class CompactSpot {  
+}
+
+class LargeSpot{
+
+}
+
+class EletricSpot {
+
+}
+
+class MediumSpot {
+
+}
+
+CompactSpot -> ParkingSpot
+MediumSpot -> ParkingSpot
+LargeSpot -> ParkingSpot
+EletricSpot -> ParkingSpot
 
 class PrepaidCard {
     Id
@@ -93,8 +113,13 @@ class AutoExitPanel {
 }
 
 class FloorDisplayBoard {
-    DisplayInfo()
+    NumberOfSpotsAvailableForCompactType
+    NumberOfSpotsAvailableForMediumType
+    NumberOfSpotsAvailableForLargeType
+    NumberOfSpotsAvailableForElectricType
 }
+
+ParkingFloor o-- FloorDisplayBoard
 
 class VehcileChargingPaymentPortal {
     Pay(Card)
